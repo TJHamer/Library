@@ -1,0 +1,45 @@
+<DOCTYPE! html>
+<html>
+<head>
+	<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+	
+</head>
+<body>
+	<div>
+		<button type="button" id="addButton" class="button">Add new book</button>
+	</div>
+	<div>
+		<table id='table'>
+			<tr>
+				<th>Title</th>
+				<th>Author</th>
+				<th>Pages</th>
+				<th>Read?</th>
+			</tr>
+		</table>
+	</div>
+	<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+  	<label for="title">Title:</label>
+  	<input type="text" id="title" name="title"><br><br>
+  	<label for="author">Author:</label>
+  	<input type="text" id="author" name="author"><br><br>
+  	<label for="pages">Pages:</label>
+  	<input type="number" id="pages" name="pages" value=100 min="1", max="10000">
+  	<label for="read">Read?</label>
+  	<input type="checkbox" id="read" name="read" checked>
+  	<button type='button' id='submitButton' class='button'>Submit</button>
+  
+  </div>
+
+</div>
+</body>
+<script src="book.js"></script>
+<link rel="stylesheet" href="style.css">
+</html>
