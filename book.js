@@ -37,43 +37,53 @@ function addToPage(array){
 			  cell1.addClass('cell')
 			       .addClass(`row${i}`)
 				   .attr('id', `id${i}-title`)
-				   .attr('data-key', `${i}`)
 				   .text(array[i]["title"]);
 		var cell2 = $('<td></td>')
 			  cell2.addClass('cell')
 			       .addClass(`row${i}`)
 			  	   .attr('id', `id${i}-author`)
-			  	   .attr('data-key', `${i}`)
 			  	   .text(array[i]["author"]);
 		var cell3 = $('<td></td>')
 			  cell3.addClass('cell')
 			       .addClass(`row${i}`)
 				   .attr('id', `id${i}-pages`)
-				   .attr('data-key', `${i}`)
 				   .text(array[i]["pages"]);
-
-
-
 
 
 		var cell4 = $('<td></td>')
 			  cell4.addClass('cell')
 			       .addClass(`row${i}`)
-			  	   .attr('id', `id${i}-read`)
-			  	   .attr('data-key', `${i}`)
-			  	   .text(array[i]["read"]);
+			  	   .attr('id', `id${i}-read`);
+
+		var readCheckBox = $('<button> </button>')
+			  readCheckBox.addClass('readButton')
+			       		  .addClass(`row${i}`)
+			  	   		  .attr('id', `id${i}-readButton`)
+			  	   		  .text(array[i]["read"]);
+		
+		if(array[i]["read"] == 'read'){
+			readCheckBox.addClass('readBtn');
+		}else if(array[i]["read"] == 'not read'){
+			readCheckBox.addClass('notReadBtn');
+		}
+
+		var cell5 = $('<td></td>')
+			  cell5.addClass('cell')
+			       .addClass(`row${i}`)
+			  	   .attr('id', `id${i}-remove`);
 
 		var btn = $('<button> </button>')
 			  btn.addClass('removeButton')
 			     .attr('id', `id${i}removeButton`)
-			     .attr('data-key', `${i}`)
 			  	 .text('removeButton');
 
+		cell4.append(readCheckBox);
+		cell5.append(btn);
 		row.append(cell1);
 		row.append(cell2);
 		row.append(cell3);
 		row.append(cell4);
-		row.append(btn);
+		row.append(cell5);
 
 		$('#table').append(row);
 
@@ -82,15 +92,35 @@ function addToPage(array){
 	$('.removeButton').on('click', function(e){
 		console.log(e);
 	var id = e.target.id;
-	var index = parseInt(document.getElementById(id).parentNode.id);
+	var index = parseInt(document.getElementById(id).parentNode.parentNode.id);
 	
+	console.log(id);
 	removeBookFromLibrary(index); //remove from array
 	//document.getElementById(id).parentNode.remove(); //removes row
 
 	clearPage();
 	addToPage(myLibrary);
+	console.log(id);
 
 	})
+
+$('.readButton').on('click', function(e){
+
+	var id = e.target.id;
+	var index = parseInt(document.getElementById(id).parentNode.parentNode.id);
+	var currentReadValue = myLibrary[index]['read'];
+
+	if (currentReadValue == 'read'){
+		myLibrary[index]['read'] = 'not read';
+	} else if(currentReadValue == 'not read'){
+		myLibrary[index]['read'] = 'read';
+	}	
+
+	clearPage();
+	addToPage(myLibrary);
+
+	})
+
 }
 
 function clearPage(){
@@ -102,8 +132,8 @@ function clearPage(){
 $('#submitButton').on('click', function(){
 
 	var title = $('#title').val();
-	var author = $('#title').val();
-	var pages = $('#title').val();
+	var author = $('#author').val();
+	var pages = $('#pages').val();
 	var readChecked = $('#read')[0]["checked"];
 	var read = readChecked ? 'read' : 'not read';
 
