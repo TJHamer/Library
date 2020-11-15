@@ -1,4 +1,37 @@
-let myLibrary = [];
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
+}
+
+
+var myLibrary = [];
+if (storageAvailable('localStorage')) {
+
+	if(!!localStorage.getItem('storedLibraryData')) {
+		myLibrary = JSON.parse(localStorage.getItem('storedLibraryData'));
+	}
+}
+
 
 function book(title, author, pages, read){
 	this.title = title
@@ -14,11 +47,13 @@ function book(title, author, pages, read){
 function addBookToLibrary(obj){
 
 	myLibrary.push(obj);
+	localStorage.setItem('storedLibraryData', JSON.stringify(myLibrary));
 }
 
 function removeBookFromLibrary(index){
 
 	myLibrary.splice(index,1);
+	localStorage.setItem('storedLibraryData', JSON.stringify(myLibrary));
 	
 }
 
@@ -115,7 +150,7 @@ $('.readButton').on('click', function(e){
 	} else if(currentReadValue == 'not read'){
 		myLibrary[index]['read'] = 'read';
 	}	
-
+	localStorage.setItem('storedLibraryData', JSON.stringify(myLibrary));
 	clearPage();
 	addToPage(myLibrary);
 
@@ -184,11 +219,11 @@ window.onclick = function(event) {
 
 
 
-var book1 = new book('The Hobbit', 'JRR Tolkein', 297, 'not read');
+/*var book1 = new book('The Hobbit', 'JRR Tolkein', 297, 'not read');
 var book2 = new book('Harry Potter', 'JK Rowling', 500, 'read');
 
 addBookToLibrary(book1);
-addBookToLibrary(book2);
+addBookToLibrary(book2);*/
 
 addToPage(myLibrary);
 
